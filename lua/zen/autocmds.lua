@@ -9,29 +9,39 @@ function M.setup(win)
   vim.api.nvim_create_autocmd("WinClosed", {
     pattern = tostring(win),
     group = group,
-    callback = function() require("zen").close() end,
+    callback = function()
+      require("zen").close()
+    end,
     once = true,
     nested = true,
   })
 
   vim.api.nvim_create_autocmd("WinEnter", {
     group = group,
-    callback = function() require("zen").on_win_enter() end,
+    callback = function()
+      require("zen").on_win_enter()
+    end,
   })
 
   vim.api.nvim_create_autocmd({ "CursorMoved", "CursorHold" }, {
     group = group,
-    callback = function() require("zen").fix_layout() end,
+    callback = function()
+      require("zen").fix_layout()
+    end,
   })
 
   vim.api.nvim_create_autocmd("VimResized", {
     group = group,
-    callback = function() require("zen").fix_layout(true) end,
+    callback = function()
+      require("zen").fix_layout(true)
+    end,
   })
 
   vim.api.nvim_create_autocmd("BufWinEnter", {
     group = group,
-    callback = function() require("zen").on_buf_win_enter() end,
+    callback = function()
+      require("zen").on_buf_win_enter()
+    end,
   })
 end
 
