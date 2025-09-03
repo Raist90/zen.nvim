@@ -114,9 +114,7 @@ function M.fix_layout(win_resized)
 end
 
 function M.close()
-  -- TODO: find a more suitable way to manage autocmds
-  pcall(vim.cmd, [[autocmd! Zen]])
-  pcall(vim.cmd, [[augroup! Zen]])
+  pcall(vim.api.nvim_del_augroup_by_name, "Zen")
 
   -- Change the parent window's cursor position to match
   -- the cursor position in the zen-mode window.
