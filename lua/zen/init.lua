@@ -114,6 +114,8 @@ function M.fix_layout(win_resized)
 end
 
 function M.close()
+  local closed_buf = vim.api.nvim_get_current_buf()
+
   pcall(vim.api.nvim_del_augroup_by_name, "Zen")
 
   -- Change the parent window's cursor position to match
@@ -145,6 +147,12 @@ function M.close()
       vim.api.nvim_set_current_win(M.parent)
     end
   end
+
+  local curr_buf = vim.api.nvim_get_current_buf()
+  if closed_buf == curr_buf then
+    return
+  end
+  vim.api.nvim_set_current_buf(closed_buf)
 end
 
 function M.open(opts)
@@ -156,20 +164,9 @@ function M.open(opts)
   end
 end
 
--- Sync the current buffer with the closed zen buffer
-function M.buf_sync(close_buf)
-  M.close()
-  local curr_buf = vim.api.nvim_get_current_buf()
-  if close_buf == curr_buf then
-    return
-  end
-  vim.api.nvim_set_current_buf(close_buf)
-end
-
 function M.toggle()
   if M.is_open() then
-    local close_buf = vim.api.nvim_get_current_buf()
-    M.buf_sync(close_buf)
+    M.close()
   else
     M.open(M.opts)
   end
