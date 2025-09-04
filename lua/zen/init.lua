@@ -156,9 +156,20 @@ function M.open(opts)
   end
 end
 
+-- Sync the current buffer with the closed zen buffer
+function M.buf_sync(close_buf)
+  M.close()
+  local curr_buf = vim.api.nvim_get_current_buf()
+  if close_buf == curr_buf then
+    return
+  end
+  vim.api.nvim_set_current_buf(close_buf)
+end
+
 function M.toggle()
   if M.is_open() then
-    M.close()
+    local close_buf = vim.api.nvim_get_current_buf()
+    M.buf_sync(close_buf)
   else
     M.open(M.opts)
   end
