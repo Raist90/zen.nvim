@@ -1,4 +1,5 @@
 local get_opts = require("zen.config").get_opts
+local ratio = require("zen.util").ratio
 
 local M = {}
 
@@ -10,18 +11,6 @@ M.opts = nil
 
 function M.round(num)
   return math.floor(num + 0.5)
-end
-
-function M.resolve(max, value)
-  local ret = max
-  if type(value) == "function" then
-    ret = value()
-  elseif value > 1 then
-    ret = value
-  else
-    ret = ret * value
-  end
-  return math.min(ret, max)
 end
 
 function M.log(msg, hl)
@@ -38,8 +27,8 @@ function M.height()
 end
 
 function M.layout(opts)
-  local width = M.resolve(vim.o.columns, opts.window.width)
-  local height = M.resolve(M.height(), opts.window.height)
+  local width = ratio(vim.o.columns, opts.window.width)
+  local height = ratio(M.height(), opts.window.height)
 
   return {
     width = M.round(width),
