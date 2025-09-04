@@ -1,3 +1,5 @@
+local action = require("zen.action")
+
 local M = {}
 
 -- TODO: listen for WinNew and BufEnter. When a new window, or bufenter in a new window, close zen mode
@@ -10,7 +12,7 @@ function M.setup(win)
     pattern = tostring(win),
     group = group,
     callback = function()
-      require("zen").close()
+      action.close()
     end,
     once = true,
     nested = true,
@@ -19,28 +21,28 @@ function M.setup(win)
   vim.api.nvim_create_autocmd("WinEnter", {
     group = group,
     callback = function()
-      require("zen").on_win_enter()
+      action.on_win_enter()
     end,
   })
 
   vim.api.nvim_create_autocmd({ "CursorMoved", "CursorHold" }, {
     group = group,
     callback = function()
-      require("zen").fix_layout()
+      action.fix_layout()
     end,
   })
 
   vim.api.nvim_create_autocmd("VimResized", {
     group = group,
     callback = function()
-      require("zen").fix_layout(true)
+      action.fix_layout(true)
     end,
   })
 
   vim.api.nvim_create_autocmd("BufWinEnter", {
     group = group,
     callback = function()
-      require("zen").on_buf_win_enter()
+      action.on_buf_win_enter()
     end,
   })
 end
