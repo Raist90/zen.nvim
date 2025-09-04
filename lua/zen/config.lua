@@ -19,7 +19,7 @@ M.default_opts = {
 
 ---@param opts ZenOpts
 function M.setup(opts)
-  M.opts = vim.tbl_deep_extend("force", {}, M.default_opts, opts or {})
+  M.opts = vim.tbl_deep_extend("force", {}, M.default_opts, opts)
 end
 
 function M.get_opts()
