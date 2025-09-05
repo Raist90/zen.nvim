@@ -1,5 +1,6 @@
 local get_opts = require("zen.config").get_opts
-local ratio = require("zen.util").ratio
+local clamp_to_max = require("zen.util").clamp_to_max
+local error = require("zen.util").error
 
 local M = {}
 
@@ -13,22 +14,14 @@ function M.round(num)
   return math.floor(num + 0.5)
 end
 
-function M.log(msg, hl)
-  vim.api.nvim_echo({ { "ZenMode: ", hl }, { msg } }, true, {})
-end
-
-function M.error(msg)
-  M.log(msg, "ErrorMsg")
-end
-
 function M.height()
   local height = vim.o.lines - vim.o.cmdheight
   return (vim.o.laststatus == 3) and height - 1 or height
 end
 
 function M.layout(opts)
-  local width = ratio(vim.o.columns, opts.window.width)
-  local height = ratio(M.height(), opts.window.height)
+  local width = clamp_to_max(vim.o.columns, opts.window.width)
+  local height = clamp_to_max(M.height(), opts.window.height)
 
   return {
     width = M.round(width),
@@ -160,7 +153,7 @@ function M.create(opts)
     zindex = opts.zindex - 10,
   })
   if not ok then
-    M.error("could not open floating window. You need a Neovim build that supports zindex (May 15 2021 or newer)")
+    error("could not open floating window. You need a Neovim build that supports zindex (May 15 2021 or newer)")
     M.bg_win = nil
     return
   end
