@@ -62,7 +62,7 @@ With [Lazy.nvim](https://github.com/folke/lazy.nvim):
 ## Requirements
 
 - Neovim 0.5+ (May 2021 or newer, for floating window zindex support)
-
+- Run `:checkhealth zen` to verify your setup and diagnose issues
 ## License
 
 MIT
