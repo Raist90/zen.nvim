@@ -19,10 +19,12 @@ M.default_opts = {
 
 ---@param opts ZenOpts|nil
 function M.setup(opts)
-  if not opts then
+  if not opts or vim.tbl_isempty(opts) then
+    M.user_opts = {}
     M.opts = M.default_opts
     return
   end
+  M.user_opts = opts
   M.opts = vim.tbl_deep_extend("force", {}, M.default_opts, opts)
 end
 
