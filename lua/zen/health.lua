@@ -1,4 +1,4 @@
-local get_opts = require("zen.config").get_opts
+local get_user_opts = require("zen.config").get_user_opts
 local default_opts = require("zen.config").default_opts
 local is_empty_table = require("zen.util").is_empty_table
 
@@ -90,7 +90,7 @@ local function validate_opts(opts)
 end
 
 local function check_opts()
-  local opts = get_opts
+  local opts = get_user_opts
   return validate_opts(opts())
 end
 

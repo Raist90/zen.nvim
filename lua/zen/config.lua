@@ -32,4 +32,8 @@ function M.get_opts()
   return M.opts or M.default_opts
 end
 
+function M.get_user_opts()
+  return M.user_opts
+end
+
 return M
