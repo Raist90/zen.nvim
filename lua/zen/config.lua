@@ -17,7 +17,7 @@ M.default_opts = {
   zindex = 40,
 }
 
----@param opts ZenOpts
+---@param opts ZenOpts|nil
 function M.setup(opts)
   M.opts = vim.tbl_deep_extend("force", {}, M.default_opts, opts)
 end
