@@ -20,6 +20,7 @@ M.default_opts = {
 ---@param opts ZenOpts|nil
 function M.setup(opts)
   if not opts or vim.tbl_isempty(opts) then
+    ---@type ZenOpts|nil|{}
     M.user_opts = {}
     M.opts = M.default_opts
     return
