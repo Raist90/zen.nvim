@@ -1,6 +1,5 @@
 local get_user_opts = require("zen.config").get_user_opts
 local default_opts = require("zen.config").default_opts
-local is_empty_table = require("zen.util").is_empty_table
 
 local M = {}
 
@@ -13,7 +12,7 @@ local function validate_opts(opts)
   local warns = {}
   local errs = {}
 
-  if is_empty_table(opts) then
+  if vim.tbl_isempty(opts) then
     table.insert(warns, "Options table is empty, using defaults")
   end
 
@@ -33,7 +32,7 @@ local function validate_opts(opts)
         table.insert(errs, "window should be a table")
       else
         if type(val) == "table" then
-          if is_empty_table(val) then
+          if vim.tbl_isempty(val) then
             table.insert(warns, "window options table is empty, using defaults")
           end
           if val.width ~= nil then
