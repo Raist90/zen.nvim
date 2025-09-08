@@ -31,15 +31,18 @@ function M.layout(opts)
   }
 end
 
+-- TODO: figure out what to do with highlights
 function M.fix_hl(win, normal)
   local cwin = vim.api.nvim_get_current_win()
   if cwin ~= win then
     vim.api.nvim_set_current_win(win)
   end
-  normal = normal or "Normal"
-  vim.cmd("setlocal winhl=NormalFloat:" .. normal .. ",FloatBorder:ZenBorder,EndOfBuffer:" .. normal)
-  vim.cmd("setlocal winblend=0")
-  vim.cmd([[setlocal fcs=eob:\ ,fold:\ ,vert:\]])
+  -- normal = normal or "Normal"
+  normal = "Normal"
+  vim.cmd("setlocal winhl=NormalFloat:" .. normal)
+  -- vim.cmd("setlocal winhl=NormalFloat:" .. normal .. ",FloatBorder:ZenBorder,EndOfBuffer:" .. normal)
+  -- vim.cmd("setlocal winblend=0")
+  -- vim.cmd([[setlocal fcs=eob:\ ,fold:\ ,vert:\]])
   -- vim.api.nvim_win_set_option(win, "winhighlight", "NormalFloat:" .. normal)
   -- vim.api.nvim_win_set_option(win, "fcs", "eob: ")
   vim.api.nvim_set_current_win(cwin)
@@ -120,7 +123,7 @@ function M.open(opts)
     -- close any possible remnants from a previous session
     -- shouldn't happen, but just in case
     M.close()
-    M.create(opts or get_opts)
+    M.create(opts)
   end
 end
 
@@ -134,10 +137,6 @@ end
 
 ---@param opts ZenOpts
 function M.create(opts)
-  if opts == nil then
-    opts = get_opts()
-  end
-
   M.parent = vim.api.nvim_get_current_win()
   M.bg_buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_set_option_value("filetype", "zenmode-bg", { buf = M.bg_buf })
