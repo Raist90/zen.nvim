@@ -80,17 +80,17 @@ function M.fix_layout(win_resized)
 end
 
 function M.close()
-  local closed_buf = vim.api.nvim_get_current_buf()
-
   pcall(vim.api.nvim_del_augroup_by_name, "Zen")
 
-  -- Change the parent window's cursor position to match
-  -- the cursor position in the zen-mode window.
+  -- Save the buffer from the Zen window before closing it
+  local zen_buf = nil
+  if M.win and vim.api.nvim_win_is_valid(M.win) then
+    zen_buf = vim.api.nvim_win_get_buf(M.win)
+  end
+
+  -- Sync cursor position if buffers match
   if M.parent and M.win then
-    -- Ensure that the parent window has the same buffer
-    -- as the zen-mode window.
-    if vim.api.nvim_win_get_buf(M.parent) == vim.api.nvim_win_get_buf(M.win) then
-      -- Then, update the parent window's cursor position.
+    if vim.api.nvim_win_get_buf(M.parent) == zen_buf then
       vim.api.nvim_win_set_cursor(M.parent, vim.api.nvim_win_get_cursor(M.win))
     end
   end
@@ -107,15 +107,17 @@ function M.close()
     vim.api.nvim_buf_delete(M.bg_buf, { force = true })
     M.bg_buf = nil
   end
-  if M.parent and vim.api.nvim_win_is_valid(M.parent) then
-    vim.api.nvim_set_current_win(M.parent)
-  end
 
-  local curr_buf = vim.api.nvim_get_current_buf()
-  if closed_buf == curr_buf then
-    return
+  if M.parent and vim.api.nvim_win_is_valid(M.parent) and zen_buf then
+    -- Only set current window if we're still in the Zen window or it's invalid
+    local cur_win = vim.api.nvim_get_current_win()
+    if not vim.api.nvim_win_is_valid(cur_win) or cur_win == M.win then
+      vim.api.nvim_set_current_win(M.parent)
+      if vim.api.nvim_win_get_buf(M.parent) ~= zen_buf then
+        vim.api.nvim_win_set_buf(M.parent, zen_buf)
+      end
+    end
   end
-  vim.api.nvim_set_current_buf(closed_buf)
 end
 
 function M.open(opts)
